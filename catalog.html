@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MiAcademy Purchase Order Catalog</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f7f8fa;
+      color: #1a1a2e;
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 2px solid #e8eaf0;
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    header p {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .badge {
+      background: #eef2ff;
+      color: #4f46e5;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .notice {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin: 24px 40px 0;
+      font-size: 13px;
+      color: #92400e;
+    }
+
+    .notice strong { color: #78350f; }
+
+    .filter-bar {
+      padding: 20px 40px 0;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-bar input {
+      padding: 8px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      width: 240px;
+      outline: none;
+      background: #fff;
+    }
+
+    .filter-bar input:focus { border-color: #6366f1; }
+
+    .tag-filter {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag-btn {
+      padding: 6px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      background: #fff;
+      color: #374151;
+      transition: all 0.15s;
+    }
+
+    .tag-btn:hover, .tag-btn.active {
+      background: #6366f1;
+      border-color: #6366f1;
+      color: #fff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+      padding: 24px 40px 60px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e8eaf0;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s;
+    }
+
+    .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      background: #f3f4f6;
+    }
+
+    .card-body {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #1a1a2e;
+      flex: 1;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 10px;
+    }
+
+    .card-tag {
+      background: #f3f4f6;
+      color: #6b7280;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .card-price {
+      margin-top: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .price-po {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .price-retail {
+      font-size: 13px;
+      color: #9ca3af;
+      text-decoration: line-through;
+    }
+
+    .price-label {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 80px 40px;
+      color: #9ca3af;
+      font-size: 16px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 80px 40px;
+      color: #9ca3af;
+      font-size: 15px;
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
+      .notice { margin: 16px 20px 0; }
+      .filter-bar { padding: 16px 20px 0; }
+      .grid { padding: 16px 20px 40px; gap: 16px; }
+    }
+
+    @media print {
+      header { position: static; }
+      .filter-bar { display: none; }
+      .notice { break-inside: avoid; }
+      .card { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>MiAcademy Workbook Catalog</h1>
+    <p>Purchase Order Pricing — Updated automatically from our store</p>
+  </div>
+  <span class="badge">PO Customers</span>
+</header>
+
+<div class="notice">
+  <strong>Purchase Order Pricing:</strong> All prices below include a $10 handling fee applied to purchase orders.
+  To place an order, contact us at <strong>support@miaplaza.com</strong> with your PO number.
+</div>
+
+<div class="filter-bar">
+  <input type="text" id="search" placeholder="Search workbooks..." oninput="renderCards()" />
+  <div class="tag-filter" id="tag-filters"></div>
+</div>
+
+<div id="content">
+  <div class="loading">Loading catalog&hellip;</div>
+</div>
+
+<script>
+  const MARKUP = 10;
+  const STORE_URL = "https://shop.miacademy.co";
+  const PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Crect width='240' height='240' fill='%23f3f4f6'/%3E%3C/svg%3E";
+
+  let allProducts = [];
+  let activeTag = null;
+
+  async function fetchAllProducts() {
+    let products = [];
+    let page = 1;
+    while (true) {
+      const res = await fetch(`${STORE_URL}/products.json?limit=250&page=${page}`);
+      const data = await res.json();
+      if (!data.products || data.products.length === 0) break;
+      products = products.concat(data.products);
+      if (data.products.length < 250) break;
+      page++;
+    }
+    return products;
+  }
+
+  function getPrice(product) {
+    const variant = product.variants[0];
+    return variant ? parseFloat(variant.price) : null;
+  }
+
+  function getImage(product) {
+    return product.images && product.images.length > 0
+      ? product.images[0].src
+      : PLACEHOLDER;
+  }
+
+  function formatPrice(n) {
+    return "$" + n.toFixed(2).replace(/\.00$/, "");
+  }
+
+  function getAllTags(products) {
+    const tagSet = new Set();
+    products.forEach(p => p.tags.forEach(t => tagSet.add(t)));
+    return Array.from(tagSet).sort();
+  }
+
+  function renderTags(tags) {
+    const container = document.getElementById("tag-filters");
+    container.innerHTML = "";
+    tags.forEach(tag => {
+      const btn = document.createElement("button");
+      btn.className = "tag-btn" + (activeTag === tag ? " active" : "");
+      btn.textContent = tag;
+      btn.onclick = () => {
+        activeTag = activeTag === tag ? null : tag;
+        document.querySelectorAll(".tag-btn").forEach(b => b.classList.remove("active"));
+        if (activeTag) btn.classList.add("active");
+        renderCards();
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  function renderCards() {
+    const query = document.getElementById("search").value.toLowerCase().trim();
+    const filtered = allProducts.filter(p => {
+      const matchesSearch = !query || p.title.toLowerCase().includes(query);
+      const matchesTag = !activeTag || p.tags.includes(activeTag);
+      return matchesSearch && matchesTag;
+    });
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    if (filtered.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "No workbooks found.";
+      grid.appendChild(empty);
+    } else {
+      filtered.forEach(product => {
+        const retailPrice = getPrice(product);
+        if (retailPrice === null) return;
+        const poPrice = retailPrice + MARKUP;
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const img = document.createElement("img");
+        img.src = getImage(product);
+        img.alt = product.title;
+        img.loading = "lazy";
+        img.onerror = () => { img.src = PLACEHOLDER; };
+
+        const body = document.createElement("div");
+        body.className = "card-body";
+
+        const title = document.createElement("div");
+        title.className = "card-title";
+        title.textContent = product.title;
+
+        const tagsDiv = document.createElement("div");
+        tagsDiv.className = "card-tags";
+        product.tags.forEach(t => {
+          const span = document.createElement("span");
+          span.className = "card-tag";
+          span.textContent = t;
+          tagsDiv.appendChild(span);
+        });
+
+        const priceDiv = document.createElement("div");
+        priceDiv.className = "card-price";
+
+        const poSpan = document.createElement("span");
+        poSpan.className = "price-po";
+        poSpan.textContent = formatPrice(poPrice);
+
+        const retailSpan = document.createElement("span");
+        retailSpan.className = "price-retail";
+        retailSpan.textContent = formatPrice(retailPrice);
+
+        priceDiv.appendChild(poSpan);
+        priceDiv.appendChild(retailSpan);
+
+        const label = document.createElement("div");
+        label.className = "price-label";
+        label.textContent = "PO price (retail + $10)";
+
+        body.appendChild(title);
+        if (product.tags.length > 0) body.appendChild(tagsDiv);
+        body.appendChild(priceDiv);
+        body.appendChild(label);
+
+        card.appendChild(img);
+        card.appendChild(body);
+        grid.appendChild(card);
+      });
+    }
+
+    const content = document.getElementById("content");
+    content.innerHTML = "";
+    content.appendChild(grid);
+  }
+
+  async function init() {
+    try {
+      allProducts = await fetchAllProducts();
+      // Sort alphabetically
+      allProducts.sort((a, b) => a.title.localeCompare(b.title));
+      const tags = getAllTags(allProducts);
+      renderTags(tags);
+      renderCards();
+    } catch (e) {
+      document.getElementById("content").innerHTML =
+        '<div class="loading">Failed to load catalog. Please try again later.</div>';
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
