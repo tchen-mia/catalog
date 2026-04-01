@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MiAcademy Purchase Order Catalog</title>
+  <title>Miaplaza Workbook Catalog</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -218,15 +218,16 @@
 
 <header>
   <div>
-    <h1>MiAcademy Workbook Catalog</h1>
-    <p>Purchase Order Pricing — Updated automatically from our store</p>
+    <h1>Miaplaza Workbook Catalog</h1>
+    <p>Purchase Order Pricing</p>
   </div>
   <span class="badge">PO Customers</span>
 </header>
 
 <div class="notice">
-  <strong>Purchase Order Pricing:</strong> All prices below include a $10 handling fee applied to purchase orders.
-  To place an order, contact us at <strong>support@miaplaza.com</strong> with your PO number.
+  When placing an order via your state funding program or charter school, there is a $10 handling fee per book included in the price.<br /><br />
+  For questions about orders placed via state funding programs, please email <strong>statefunding@mia.school</strong><br />
+  For questions about orders placed via charter schools, please email <strong>charters@mia.school</strong>
 </div>
 
 <div class="filter-bar">
@@ -352,21 +353,11 @@
         poSpan.className = "price-po";
         poSpan.textContent = formatPrice(poPrice);
 
-        const retailSpan = document.createElement("span");
-        retailSpan.className = "price-retail";
-        retailSpan.textContent = formatPrice(retailPrice);
-
         priceDiv.appendChild(poSpan);
-        priceDiv.appendChild(retailSpan);
-
-        const label = document.createElement("div");
-        label.className = "price-label";
-        label.textContent = "PO price (retail + $10)";
 
         body.appendChild(title);
         if (product.tags.length > 0) body.appendChild(tagsDiv);
         body.appendChild(priceDiv);
-        body.appendChild(label);
 
         card.appendChild(img);
         card.appendChild(body);
