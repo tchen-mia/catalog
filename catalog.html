@@ -199,6 +199,36 @@
       grid-column: 1 / -1;
     }
 
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-logo {
+      height: 36px;
+      width: auto;
+    }
+
+    .stock-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-top: 8px;
+    }
+
+    .stock-in {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .stock-out {
+      background: #f3f4f6;
+      color: #9ca3af;
+    }
+
     @media (max-width: 600px) {
       header { padding: 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
       .notice { margin: 16px 20px 0; }
@@ -217,9 +247,12 @@
 <body>
 
 <header>
-  <div>
-    <h1>Miaplaza Workbook Catalog</h1>
-    <p>Purchase Order Pricing</p>
+  <div class="header-left">
+    <img class="header-logo" src="https://shop.miacademy.co/cdn/shop/t/6/assets/miacademy-logo.svg" alt="Miacademy" />
+    <div>
+      <h1>Miaplaza Workbook Catalog</h1>
+      <p>Purchase Order Pricing</p>
+    </div>
   </div>
   <span class="badge">PO Customers</span>
 </header>
@@ -355,9 +388,15 @@
 
         priceDiv.appendChild(poSpan);
 
+        const inStock = product.variants.some(v => v.available);
+        const stockBadge = document.createElement("span");
+        stockBadge.className = "stock-badge " + (inStock ? "stock-in" : "stock-out");
+        stockBadge.textContent = inStock ? "In Stock" : "Out of Stock";
+
         body.appendChild(title);
         if (product.tags.length > 0) body.appendChild(tagsDiv);
         body.appendChild(priceDiv);
+        body.appendChild(stockBadge);
 
         card.appendChild(img);
         card.appendChild(body);
