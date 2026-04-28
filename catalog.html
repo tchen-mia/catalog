@@ -56,18 +56,6 @@
       margin-top: 2px;
     }
 
-    .header-badge {
-      margin-left: auto;
-      background: #121212;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
     /* ── Notice ── */
     .notice {
       background: #fffbeb;
@@ -201,7 +189,6 @@
     .card-price-block { margin-top: 10px; }
     .price-label { font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
     .price-po { font-size: 17px; font-weight: 700; color: #121212; }
-    .price-retail { font-size: 12px; color: #9ca3af; text-decoration: line-through; margin-left: 6px; }
 
     /* ── States ── */
     .loading-state, .empty-state {
@@ -336,7 +323,7 @@
       <div class="header-title">Workbook Catalog</div>
       <div class="header-subtitle">Purchase Order Pricing</div>
     </div>
-    <span class="header-badge">PO Customers</span>
+
   </header>
 </div>
 
@@ -617,12 +604,8 @@
         poSpan.className = "price-po";
         poSpan.textContent = formatPrice(poPrice);
 
-        const retailSpan = document.createElement("span");
-        retailSpan.className = "price-retail";
-        retailSpan.textContent = formatPrice(retailPrice);
 
         priceRow.appendChild(poSpan);
-        priceRow.appendChild(retailSpan);
         priceBlock.appendChild(priceLabel);
         priceBlock.appendChild(priceRow);
 
